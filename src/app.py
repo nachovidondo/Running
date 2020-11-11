@@ -19,13 +19,27 @@ ventana.config(bg = COLOR_WHITE)
 ventana.geometry("400x300")
 ventana.iconbitmap("runner.ico")
 
+
 # Podes quitar el comentario para ver la imagen si te interesa.
 # imagenL = PhotoImage(file="imagen1.png")
 # labelimagen = Label(ventana,image=imagenL).place(x=0,y=0)
     
 def Enviardatos():
     textoprint = text1.get()
-    messagebox.showinfo("Corriste: ", textoprint)
+    
+    
+    if int(textoprint) <= 120 and int (textoprint)>=0:
+        if int(textoprint)>=60:
+            
+            hora=int(textoprint )// 60
+            minuto= int(textoprint )% 60
+            messagebox.showinfo("Corriste : ",[hora," hora y " ,minuto, " minutos"])
+            
+        else : 
+            messagebox.showinfo("Corriste : ",["minutos :", textoprint])
+    else:
+        messagebox.showinfo("Error","Error numerico")
+        
     ventana.destroy()
 
 label1 = Label(ventana, text = "¿Cuantos minutos corriste hoy?")
@@ -38,7 +52,8 @@ label2.place(x = 20,y = 50)
 label2.config(fon = ("lato", 20))
 label2.config(bg = COLOR_WHITE, fg = COLOR_BLACK)
 
-text1 = Entry(ventana)
+v=IntVar()
+text1 = Entry(ventana,textvariable=v)
 text1.pack()
 text1.place(x = 20, y = 150)
 
