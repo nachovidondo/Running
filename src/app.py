@@ -1,6 +1,8 @@
 from tkinter import *
 from tkinter import messagebox
+
 from datetime import datetime
+import time
 import locale
 
 COLOR_WHITE = "#FAFAFA"
@@ -19,7 +21,6 @@ ventana.config(bg = COLOR_WHITE)
 ventana.geometry("400x300")
 ventana.iconbitmap("runner.ico")
 
-
 # Podes quitar el comentario para ver la imagen si te interesa.
 # imagenL = PhotoImage(file="imagen1.png")
 # labelimagen = Label(ventana,image=imagenL).place(x=0,y=0)
@@ -27,20 +28,17 @@ ventana.iconbitmap("runner.ico")
 def Enviardatos():
     textoprint = text1.get()
     
-    
-    if int(textoprint) <= 120 and int (textoprint)>=0:
-        if int(textoprint)>=60:
-            
-            hora=int(textoprint )// 60
-            minuto= int(textoprint )% 60
-            messagebox.showinfo("Corriste : ",[hora," hora y " ,minuto, " minutos"])
-            
-        else : 
-            messagebox.showinfo("Corriste : ",["minutos :", textoprint])
+    if int(textoprint) > 180:
+        messagebox.showinfo("Error", "El numero es muy alto")
+    elif int (textoprint) <= 0:
+        messagebox.showinfo("Error", "Inserte un numero valido")
     else:
-        messagebox.showinfo("Error","Error numerico")
-        
-    ventana.destroy()
+        secs = int(textoprint) * 60
+        runningTime = time.strftime("%H:%M:%S", time.gmtime(int(secs)))
+        message = "Corriste: " + str(minutes) + "hs."
+        messagebox.showinfo("Resultados", minutes)
+    
+    #ventana.destroy()
 
 label1 = Label(ventana, text = "¿Cuantos minutos corriste hoy?")
 label1.place(x = 20,y = 120)
@@ -58,8 +56,8 @@ text1.pack()
 text1.place(x = 20, y = 150)
 
 #botones
-boton_nuevo = Button(ventana, text = "Nuevo Registro ", fon = FONT_SMALL).place(x = 20, y = 200)
-boton_guardar = Button(ventana, text = "Guardar ", fon = FONT_SMALL, command = Enviardatos).place(x = 150, y = 200)
+boton_limpiar = Button(ventana, text = "Limpiar", fon = FONT_SMALL).place(x = 20, y = 200)
+boton_guardar = Button(ventana, text = "Guardar", fon = FONT_SMALL, command = Enviardatos).place(x = 150, y = 200)
 
 def fecha_hora():
     now = datetime.now()
