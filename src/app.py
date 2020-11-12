@@ -22,8 +22,8 @@ def delete():
     text1.delete(0,"end")
     
 def persist(timestamp, runningTime):
-    #estadodeconexion = consulta.connect()
-    #print(estadodeconexion.connection)
+    estadodeconexion = consulta.connect()
+    print(estadodeconexion.connection)
     consulta.insertData(timestamp, runningTime)
     
 def enviarDatos():
