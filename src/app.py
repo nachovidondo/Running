@@ -18,8 +18,14 @@ currentTime = dateTimeNow.strftime("%I:%M %p")
 ventana = Tk()
 ventana.title("Programa de Running")
 ventana.config(bg = COLOR_WHITE)
-ventana.geometry("400x300")
+ventana.geometry("500x300")
 ventana.iconbitmap("runner.ico")
+imagen=PhotoImage(file="imagen1.png")
+label_imagen=Label(ventana,image=imagen)
+label_imagen.pack()
+
+def delete():
+    text1.delete(0,"end")
 
 # Podes quitar el comentario para ver la imagen si te interesa.
 # imagenL = PhotoImage(file="imagen1.png")
@@ -41,7 +47,7 @@ def Enviardatos():
     #ventana.destroy()
 
 label1 = Label(ventana, text = "¿Cuantos minutos corriste hoy?")
-label1.place(x = 20,y = 120)
+label1.place(x = 20,y = 170)
 label1.config(fon = FONT_SMALL)
 label1.config(bg = COLOR_WHITE, fg = COLOR_BLACK)
 
@@ -53,11 +59,11 @@ label2.config(bg = COLOR_WHITE, fg = COLOR_BLACK)
 v=IntVar()
 text1 = Entry(ventana,textvariable=v)
 text1.pack()
-text1.place(x = 20, y = 150)
+text1.place(x = 20, y = 200)
 
 #botones
-boton_limpiar = Button(ventana, text = "Limpiar", fon = FONT_SMALL).place(x = 20, y = 200)
-boton_guardar = Button(ventana, text = "Guardar", fon = FONT_SMALL, command = Enviardatos).place(x = 150, y = 200)
+boton_borrar = Button(ventana, text = "Borrar", command= delete , fon = FONT_SMALL).place(x = 20, y = 250)
+boton_guardar = Button(ventana, text = "Guardar", fon = FONT_SMALL, command = Enviardatos).place(x = 150, y = 250)
 
 def fecha_hora():
     now = datetime.now()
