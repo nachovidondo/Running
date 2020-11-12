@@ -1,16 +1,23 @@
 import sqlite3
 import os
-
+   
 APP_PATH = os.getcwd()
 DB_PATH = APP_PATH+ '/my_database.db'
+con = None 
+cursor = None
 
-con = sqlite3.connect (DB_PATH)
-cursor = con.cursor()
-cursor.execute( """
-    CREATE TABLE TIEMPO_CORRIDO(
-        timestamp TEXT PRIMARE KEY NOT NULL,
-        running_time TEXT
-    )"""
-    )
+#def connect():
+#  con = sqlite3.connect(DB_PATH)
+#  cursor = con.cursor()
+#  return cursor
 
-con.close()
+def insertData(saveTime, runningTime):
+    con = sqlite3.connect(DB_PATH)
+    cursor = con.cursor()
+    saveTime = str(saveTime)
+    cursor.execute( 
+        """INSERT INTO TIEMPO_CORRIDO VALUES (?, ?)""", (saveTime, runningTime))
+    con.commit()
+    
+       
+#con.close()

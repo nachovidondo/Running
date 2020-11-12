@@ -1,16 +1,30 @@
 from tkinter import *
 from tkinter import messagebox
-
 from datetime import datetime
 import time
 import locale
+import sqlite3
+import consulta
+
 
 COLOR_WHITE = "#FAFAFA"
 COLOR_BLACK = "#000"
 FONT_SMALL = ("lato", 10)
 
+locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+
+dateTimeNow = datetime.now()
+currentDate = dateTimeNow.strftime("%A %d, %B %Y")
+currentTime = dateTimeNow.strftime("%I:%M %p")
+
+
 def delete():
     text1.delete(0,"end")
+    
+def persist(timestamp, runningTime):
+    #estadodeconexion = consulta.connect()
+    #print(estadodeconexion.connection)
+    consulta.insertData(timestamp, runningTime)
     
 def enviarDatos():
     textoprint = text1.get()
@@ -24,12 +38,8 @@ def enviarDatos():
         runningTime = time.strftime("%H:%M:%S", time.gmtime(int(secs)))
         message = "Corriste: " + str(runningTime) + "hs."
         messagebox.showinfo("Resultados", message)
-    
-locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+        persist(currentTime + " " + currentDate, runningTime)
 
-dateTimeNow = datetime.now()
-currentDate = dateTimeNow.strftime("%A %d, %B %Y")
-currentTime = dateTimeNow.strftime("%I:%M %p")
 
 ventana = Tk()
 ventana.title("Programa de Running")
