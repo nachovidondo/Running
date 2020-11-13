@@ -4,8 +4,7 @@ from datetime import datetime
 import time
 import locale
 import sqlite3
-import consulta
-
+from consulta import DBConnection
 
 COLOR_WHITE = "#FAFAFA"
 COLOR_BLACK = "#000"
@@ -16,15 +15,15 @@ locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
 dateTimeNow = datetime.now()
 currentDate = dateTimeNow.strftime("%A %d, %B %Y")
 currentTime = dateTimeNow.strftime("%I:%M %p")
-
+dbConnection = None
 
 def delete():
-    text1.delete(0,"end")
+    text1.delete(0, "end")
     
-def persist(timestamp, runningTime):
-    #estadodeconexion = consulta.connect()
-    #print(estadodeconexion.connection)
-    consulta.insertData(timestamp, runningTime)
+def persist(savedTime, runningTime):
+    dbConnection = DBConnection()
+    print("Conexion: ", dbConnection.con)
+    dbConnection.insertData(savedTime, runningTime)
     
 def enviarDatos():
     textoprint = text1.get()
@@ -38,8 +37,8 @@ def enviarDatos():
         runningTime = time.strftime("%H:%M:%S", time.gmtime(int(secs)))
         message = "Corriste: " + str(runningTime) + "hs."
         messagebox.showinfo("Resultados", message)
-        persist(currentTime + " " + currentDate, runningTime)
-
+        savedTime = currentTime + " " + currentDate
+        persist(str(savedTime), str(runningTime))
 
 ventana = Tk()
 ventana.title("Programa de Running")
@@ -47,10 +46,9 @@ ventana.config(bg = COLOR_WHITE)
 ventana.geometry("500x300")
 ventana.iconbitmap("runner.ico")
 
-imagen=PhotoImage(file="imagen1.png")
-
-label_imagen=Label(ventana,image=imagen)
-label_imagen.pack()
+# imagen=PhotoImage(file="imagen1.png")
+# label_imagen=Label(ventana,image=imagen)
+# label_imagen.pack()
 
 label_1 = Label(ventana, text = "¿Cuantos minutos corriste hoy?")
 label_1.place(x = 20,y = 170)
