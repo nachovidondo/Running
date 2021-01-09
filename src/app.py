@@ -1,12 +1,19 @@
-from tkinter import *
-from tkinter import messagebox
-from datetime import datetime
+from tkinter import*
+import datetime
 import time
 import locale
+from datetime import datetime
+from tkinter import messagebox
+from consulta import *
+from tkinter import*
+from datetime import datetime
+from tkinter.ttk import Treeview
+from consulta import *
 import sqlite3
-import consulta
-
-
+from tkinter import messagebox
+from tkinter import ttk
+import tkinter as tk
+import tkinter.ttk as ttk
 COLOR_WHITE = "#FAFAFA"
 COLOR_BLACK = "#000"
 FONT_SMALL = ("lato", 10)
@@ -17,14 +24,16 @@ dateTimeNow = datetime.now()
 currentDate = dateTimeNow.strftime("%A %d, %B %Y")
 currentTime = dateTimeNow.strftime("%I:%M %p")
 
+dbConnection = None
 
 def delete():
     text1.delete(0,"end")
     
-def persist(timestamp, runningTime):
-    #estadodeconexion = consulta.connect()
-    #print(estadodeconexion.connection)
-    consulta.insertData(timestamp, runningTime)
+def persist(savedTime, runningTime):
+    dbConnection = DBConnection()
+    print("Conexion : ", dbConnection.con)
+    dbConnection.insertData(savedTime, runningTime)
+    
     
 def enviarDatos():
     textoprint = text1.get()
@@ -38,18 +47,29 @@ def enviarDatos():
         runningTime = time.strftime("%H:%M:%S", time.gmtime(int(secs)))
         message = "Corriste: " + str(runningTime) + "hs."
         messagebox.showinfo("Resultados", message)
-        persist(currentTime + " " + currentDate, runningTime)
+        savedTime= currentTime + " " + currentDate
+        persist(savedTime, runningTime)
+
+def showInfo():
+    with sqlite3.connect(DB_PATH) as connection:
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM TIEMPO_CORRIDO")
+        data = (row for row in cursor.fetchall())
+
+        ventana = tk.Tk()
+        table = Table(ventana, headings=('codigo_running','save_time','running_time'), rows=data)
+        table.pack(expand=tk.YES, fill=tk.BOTH)
 
 
 ventana = Tk()
 ventana.title("Programa de Running")
 ventana.config(bg = COLOR_WHITE)
-ventana.geometry("500x300")
 ventana.iconbitmap("runner.ico")
+ventana.geometry("600x400")
+ventana.resizable(width=False, height=False)
 
-imagen=PhotoImage(file="imagen1.png")
-
-label_imagen=Label(ventana,image=imagen)
+image=PhotoImage(file="run.png")
+label_imagen=Label(ventana,image=image)
 label_imagen.pack()
 
 label_1 = Label(ventana, text = "¿Cuantos minutos corriste hoy?")
@@ -58,7 +78,7 @@ label_1.config(fon = FONT_SMALL)
 label_1.config(bg = COLOR_WHITE, fg = COLOR_BLACK)
 
 label_2 = Label(ventana, text = str(currentDate) + " \n" + str(currentTime), anchor="e", justify=LEFT)
-label_2.place(x = 20,y = 50)
+label_2.place(x = 20,y = 300)
 label_2.config(fon = ("lato", 20))
 label_2.config(bg = COLOR_WHITE, fg = COLOR_BLACK)
 
@@ -71,6 +91,33 @@ botonBorrar = Button(ventana, text = "Borrar", command= delete , fon = FONT_SMAL
 botonGuardar = Button(ventana, text = "Guardar", fon = FONT_SMALL, command = enviarDatos).place(x = 150, y = 250)
 
 
+menuMostrar=Menu(ventana)
+ventana.config(menu=menuMostrar)
+Mostrarmenu=Menu(menuMostrar,tearoff=0)
+menuMostrar.add_cascade(label="Menu",menu = Mostrarmenu)
+
+Mostrarmenu.add_command(label="Mostrar Datos",command=showInfo)
+Mostrarmenu.add_separator
+
+class Table(tk.Frame):
+    def __init__(self, parent=None, headings=tuple(), rows=tuple()):
+        super().__init__(parent)
+  
+        table = ttk.Treeview(self, show="headings", selectmode="browse")
+        table["columns"] = headings
+        table["displaycolumns"] = headings
+  
+        for head in headings:
+            table.heading(head, text=head, anchor=tk.CENTER)
+            table.column(head, anchor=tk.CENTER)
+  
+        for row in rows:
+            table.insert('', tk.END, values=tuple(row))
+  
+        scrolltable = tk.Scrollbar(self, command=table.yview)
+        table.configure(yscrollcommand=scrolltable.set)
+        scrolltable.pack(side=tk.RIGHT, fill=tk.Y)
+        table.pack(expand=tk.YES, fill=tk.BOTH)
 
 ventana.mainloop()
 
