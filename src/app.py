@@ -10,10 +10,15 @@ from datetime import datetime
 from tkinter.ttk import Treeview
 from consulta import *
 import sqlite3
+<<<<<<< HEAD
 from tkinter import messagebox
 from tkinter import ttk
 import tkinter as tk
 import tkinter.ttk as ttk
+=======
+from consulta import DBConnection
+
+>>>>>>> 1bf140505b823671435c74998ecef68e60ad6ef2
 COLOR_WHITE = "#FAFAFA"
 COLOR_BLACK = "#000"
 FONT_SMALL = ("lato", 10)
@@ -23,17 +28,25 @@ locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
 dateTimeNow = datetime.now()
 currentDate = dateTimeNow.strftime("%A %d, %B %Y")
 currentTime = dateTimeNow.strftime("%I:%M %p")
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1bf140505b823671435c74998ecef68e60ad6ef2
 dbConnection = None
 
 def delete():
-    text1.delete(0,"end")
+    text1.delete(0, "end")
     
 def persist(savedTime, runningTime):
     dbConnection = DBConnection()
+<<<<<<< HEAD
     print("Conexion : ", dbConnection.con)
     dbConnection.insertData(savedTime, runningTime)
     
+=======
+    print("Conexion: ", dbConnection.con)
+    dbConnection.insertData(savedTime, runningTime)
+>>>>>>> 1bf140505b823671435c74998ecef68e60ad6ef2
     
 def enviarDatos():
     textoprint = text1.get()
@@ -47,6 +60,7 @@ def enviarDatos():
         runningTime = time.strftime("%H:%M:%S", time.gmtime(int(secs)))
         message = "Corriste: " + str(runningTime) + "hs."
         messagebox.showinfo("Resultados", message)
+<<<<<<< HEAD
         savedTime= currentTime + " " + currentDate
         persist(savedTime, runningTime)
 
@@ -60,6 +74,10 @@ def showInfo():
         table = Table(ventana, headings=('codigo_running','save_time','running_time'), rows=data)
         table.pack(expand=tk.YES, fill=tk.BOTH)
 
+=======
+        savedTime = currentTime + " " + currentDate
+        persist(str(savedTime), str(runningTime))
+>>>>>>> 1bf140505b823671435c74998ecef68e60ad6ef2
 
 ventana = Tk()
 ventana.title("Programa de Running")
@@ -68,9 +86,15 @@ ventana.iconbitmap("runner.ico")
 ventana.geometry("600x400")
 ventana.resizable(width=False, height=False)
 
+<<<<<<< HEAD
 image=PhotoImage(file="run.png")
 label_imagen=Label(ventana,image=image)
 label_imagen.pack()
+=======
+# imagen=PhotoImage(file="imagen1.png")
+# label_imagen=Label(ventana,image=imagen)
+# label_imagen.pack()
+>>>>>>> 1bf140505b823671435c74998ecef68e60ad6ef2
 
 label_1 = Label(ventana, text = "¿Cuantos minutos corriste hoy?")
 label_1.place(x = 20,y = 170)
